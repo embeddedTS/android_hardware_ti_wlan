@@ -5,18 +5,18 @@ ifeq ($(TARGET_SIMULATOR),true)
 endif
 
 ifeq ($(WPA_SUPPLICANT_VERSION),VER_0_6_X)
-    WPA_SUPPL_DIR = external/wpa_supplicant_6/wpa_supplicant
+    WPA_SUPPL_DIR = external/wpa_supplicant_6/
 endif
 
 ifeq ($(WPA_SUPPLICANT_VERSION),VER_0_8_X)
-    WPA_SUPPL_DIR = external/wpa_supplicant_8/wpa_supplicant
+    WPA_SUPPL_DIR = external/wpa_supplicant_8/
 endif
 
 ifeq ($(WPA_SUPPLICANT_VERSION),VER_0_8_X_TI)
-    WPA_SUPPL_DIR = external/wpa_supplicant_8_ti/wpa_supplicant
+    WPA_SUPPL_DIR = external/wpa_supplicant_8_ti/
 endif
 
-include $(WPA_SUPPL_DIR)/android.config
+include $(WPA_SUPPL_DIR)/wpa_supplicant/android.config
 
 ifneq ($(BOARD_WPA_SUPPLICANT_DRIVER),)
   CONFIG_DRIVER_$(BOARD_WPA_SUPPLICANT_DRIVER) := y
@@ -59,12 +59,14 @@ INCLUDES = $(WPA_SUPPL_DIR) \
     $(WPA_SUPPL_DIR)/src/drivers \
     $(WPA_SUPPL_DIR)/src/l2_packet \
     $(WPA_SUPPL_DIR)/src/utils \
-    $(WPA_SUPPL_DIR)/src/wps
+    $(WPA_SUPPL_DIR)/src/wps \
+	$(WPA_SUPPL_DIR)/wpa_supplicant
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := lib_driver_cmd_wl12xx
-LOCAL_MODULE_TAGS := eng
+#LOCAL_MODULE_TAGS := eng
 LOCAL_SHARED_LIBRARIES := libc libcutils
+
 ifneq ($(wildcard external/libnl),)
 INCLUDES += external/libnl/include
 LOCAL_SHARED_LIBRARIES += libnl
@@ -72,6 +74,7 @@ else
 INCLUDES += external/libnl-headers
 LOCAL_STATIC_LIBRARIES := libnl_2
 endif
+
 LOCAL_CFLAGS := $(L_CFLAGS)
 LOCAL_SRC_FILES := $(L_SRC)
 LOCAL_C_INCLUDES := $(INCLUDES)
